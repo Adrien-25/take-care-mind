@@ -6,15 +6,19 @@ import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
-  sendEmailVerification
+  sendEmailVerification,
 } from "firebase/auth";
 import { toast, ToastContainer } from "react-toastify";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
+
 // import styles from "./AuthForm.module.css";
 
 const AuthForm = ({ onAuth }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async (e) => {
@@ -67,6 +71,11 @@ const AuthForm = ({ onAuth }) => {
         case "auth/wrong-password":
           setErrorMessage("Le mot de passe est incorrect.");
           break;
+        case "auth/weak-password":
+          setErrorMessage(`
+            Le mot de passe doit comporter une majuscule, une minuscule, un chiffre et un caractère spécial (@, #, $, etc.)
+          `);
+          break;
         case "auth/invalid-credential":
           setErrorMessage("Identifiant ou mot de passe invalide.");
           break;
@@ -117,7 +126,9 @@ const AuthForm = ({ onAuth }) => {
               S'inscrire
             </button>
           </div>
-          {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
+          {errorMessage && (
+            <p className="text-sm text-red-500 mb-3">{errorMessage}</p>
+          )}
           <input
             type="email"
             name="email"
@@ -128,16 +139,29 @@ const AuthForm = ({ onAuth }) => {
             className="w-full p-3 my-4 border border-[#555] rounded-lg bg-[#333] text-white placeholder-[#aaa] focus:bg-[#333]"
             autoComplete="email"
           />
-          <input
-            type="password"
-            name="password"
-            placeholder="Mot de passe"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="w-full p-3 my-4 border border-[#555] rounded-lg bg-[#333] text-white placeholder-[#aaa] focus:bg-[#333]"
-            autoComplete="new-password"
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Mot de passe"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="w-full p-3 my-4 border border-[#555] rounded-lg bg-[#333] text-white placeholder-[#aaa] focus:bg-[#333]"
+              autoComplete="new-password"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white"
+            >
+              {showPassword ? (
+                <EyeSlashIcon className="w-5 h-5" />
+              ) : (
+                <EyeIcon className="w-5 h-5" />
+              )}
+            </button>
+          </div>
           {isLogin && (
             <div className="text-right  underline	text-sm mt-3">
               <a href="/forgot-password">Mot de passe oublié ?</a>
