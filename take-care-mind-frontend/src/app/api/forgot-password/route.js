@@ -1,6 +1,6 @@
 // src/app/api/forgot-password/route.js
 import { getAuth } from "firebase/auth";
-import app from "../../../lib/firebase"; 
+import app from "../../../lib/firebase";
 import { sendPasswordResetEmail } from "firebase/auth";
 
 const auth = getAuth(app);
