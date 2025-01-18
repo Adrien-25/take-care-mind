@@ -36,7 +36,7 @@ const LoginPage: React.FC = () => {
         return;
       }
       const token = await userCredential.user.getIdToken();
-      setCookie("token", token, { maxAge: 60 * 60 * 24 * 7 }); // 7 jours
+      setCookie("authToken", token, { maxAge: 60 * 60 * 24 * 7 }); // 7 jours
       router.push("/dashboard");
     } catch (error: any) {
       console.error("Erreur de connexion:", error);
@@ -67,8 +67,7 @@ const LoginPage: React.FC = () => {
     try {
       const result = await signInWithPopup(auth, provider);
       const token = await result.user.getIdToken();
-    //   console.log("Google Sign In - Token:", token);
-      setCookie("token", token, { maxAge: 60 * 60 * 24 * 7 }); // 7 jours
+      setCookie("authToken", token, { maxAge: 60 * 60 * 24 * 7 }); // 7 jours
       router.push("/dashboard");
     } catch (error) {
       console.error(error);

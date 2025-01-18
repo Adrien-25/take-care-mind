@@ -1,5 +1,6 @@
 // components/ProtectedRoute.tsx
 import { useAuth } from "@/lib/AuthContext";
+import { getCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -8,9 +9,10 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const { user } = useAuth();
   const router = useRouter();
+  const authToken = getCookie("authToken");
 
   useEffect(() => {
-    if (!user) {
+    if (!user && !authToken) {
       router.push("/auth/login");
     }
   }, [user, router]);
