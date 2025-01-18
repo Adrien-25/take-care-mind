@@ -12,6 +12,7 @@ import {
   FiUsers,
 } from "react-icons/fi";
 import { usePathname } from "next/navigation";
+import { UserProfile } from "./UserProfile";
 
 interface MenuItem {
   icon: React.ElementType;
@@ -51,6 +52,10 @@ const Sidebar: React.FC = () => {
   };
 
   const isActive = (href: string) => pathname === href;
+
+  const handleLogout = () => {
+    console.log("Déconnexion");
+  };
 
   const renderMenuItem = (item: MenuItem, index: number) => {
     if (item.subItems) {
@@ -108,7 +113,7 @@ const Sidebar: React.FC = () => {
   };
 
   return (
-    <div className="bg-gray-800 text-white h-full">
+    <div className="bg-gray-800 text-white h-full flex justify-between flex-col">
       <div className="px-6 py-4 my-4">
         <Link href="/" className="text-2xl font-bold">
           Take Care Mind
@@ -117,9 +122,11 @@ const Sidebar: React.FC = () => {
       <nav className="mt-6">
         <ul>{menuItems.map((item, index) => renderMenuItem(item, index))}</ul>
       </nav>
-      <div>
-        
-      </div>
+
+      <UserProfile
+        name="Adrien SCHMIDT"
+        onLogout={handleLogout}
+      />
     </div>
   );
 };
