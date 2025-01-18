@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { AuthProvider } from "@/lib/AuthContext";
 
 export const metadata: Metadata = {
   title: "Take Care Mind",
@@ -13,7 +14,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr">
-      <body className={` antialiased`}>{children}</body>
+      <AuthProvider>
+        <body className={` antialiased`}>{children}</body>
+      </AuthProvider>
     </html>
   );
 }
