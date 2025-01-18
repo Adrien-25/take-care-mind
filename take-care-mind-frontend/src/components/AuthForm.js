@@ -11,8 +11,6 @@ import {
 import { toast, ToastContainer } from "react-toastify";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 
-// import styles from "./AuthForm.module.css";
-
 const AuthForm = ({ onAuth }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
@@ -38,7 +36,7 @@ const AuthForm = ({ onAuth }) => {
           return;
         }
         const token = await userCredential.user.getIdToken();
-        onAuth(token);
+        token;
       } else {
         // INSCRIPTION
         const userCredential = await createUserWithEmailAndPassword(
@@ -92,7 +90,7 @@ const AuthForm = ({ onAuth }) => {
     try {
       const result = await signInWithPopup(auth, provider);
       const token = await result.user.getIdToken();
-      onAuth(token); // Passer le token au parent
+      onAuth(token);
     } catch (error) {
       console.error(error);
       toast.error(
