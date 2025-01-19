@@ -34,7 +34,7 @@ const Sidebar: React.FC = () => {
         { icon: FiLayers, text: "Méditation", href: "/features/function1" },
         { icon: FiLayers, text: "Objectifs", href: "/features/function2" },
         { icon: FiLayers, text: "Activité", href: "/features/function3" },
-        { icon: FiLayers, text: "Routine", href: "/features/function3" },
+        { icon: FiLayers, text: "Routine", href: "/features/routine" },
         { icon: FiLayers, text: "Stoisisme", href: "/features/function3" },
         { icon: FiLayers, text: "Motivation", href: "/features/function3" },
       ],
@@ -123,10 +123,7 @@ const Sidebar: React.FC = () => {
         <ul>{menuItems.map((item, index) => renderMenuItem(item, index))}</ul>
       </nav>
 
-      <UserProfile
-        name="Adrien SCHMIDT"
-        onLogout={handleLogout}
-      />
+      <UserProfile name="Adrien SCHMIDT" onLogout={handleLogout} />
     </div>
   );
 };
