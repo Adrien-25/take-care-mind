@@ -10,7 +10,7 @@ const Dashboard = () => {
   // console.log("Dashboard - Current user:", user);
   return (
     <ProtectedRoute>
-      <div className="flex h-screen bg-gray-900 text-white">
+      <div className="flex h-screen">
         <Sidebar />
         <main className="flex-1 p-10">
           <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
