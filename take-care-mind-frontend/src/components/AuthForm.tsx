@@ -1,102 +1,24 @@
 // src/components/AuthForm.js
 import React, { useState } from "react";
-import { auth } from "@/lib/firebase";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithPopup,
-  sendEmailVerification,
-} from "firebase/auth";
-import { toast, ToastContainer } from "react-toastify";
+import {  ToastContainer } from "react-toastify";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
+import Image from "next/image";
 
-const AuthForm = ({ onAuth }) => {
+const AuthForm = ({  }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const [errorMessage, setErrorMessage] = useState("");
+  // const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      if (isLogin) {
-        // CONNEXION
-        const userCredential = await signInWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
-        if (!userCredential.user.emailVerified) {
-          toast.error(
-            "Veuillez vérifier votre adresse e-mail avant de vous connecter."
-          );
-          return;
-        }
-        const token = await userCredential.user.getIdToken();
-        token;
-      } else {
-        // INSCRIPTION
-        const userCredential = await createUserWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
-        // await createUserWithEmailAndPassword(auth, email, password);
-
-        // Envoyer l'e-mail de vérification
-        await sendEmailVerification(userCredential.user);
-        toast.success(
-          "Inscription réussie ! Vous pouvez maintenant vous connecter."
-        );
-        setIsLogin(true);
-      }
-    } catch (error) {
-      // Gérer les erreurs ici
-      console.error("Erreur de connexion:", error);
-      switch (error.code) {
-        case "auth/invalid-email":
-          setErrorMessage("L'adresse e-mail est invalide.");
-          break;
-        case "auth/user-disabled":
-          setErrorMessage("Ce compte a été désactivé.");
-          break;
-        case "auth/user-not-found":
-          setErrorMessage("Aucun utilisateur trouvé avec cet e-mail.");
-          break;
-        case "auth/wrong-password":
-          setErrorMessage("Le mot de passe est incorrect.");
-          break;
-        case "auth/weak-password":
-          setErrorMessage(`
-            Le mot de passe doit comporter une majuscule, une minuscule, un chiffre et un caractère spécial (@, #, $, etc.)
-          `);
-          break;
-        case "auth/invalid-credential":
-          setErrorMessage("Identifiant ou mot de passe invalide.");
-          break;
-        default:
-          setErrorMessage("Une erreur est survenue. Veuillez réessayer.");
-      }
-      console.error(error);
-      // toast.error("Une erreur est survenue. Veuillez réessayer.");
-    }
+  const handleSubmit = async () => {
+    console.log("submit auth");
   };
 
   const handleGoogleSignIn = async () => {
-    const provider = new GoogleAuthProvider();
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const token = await result.user.getIdToken();
-      onAuth(token);
-    } catch (error) {
-      console.error(error);
-      toast.error(
-        "Une erreur est survenue lors de la connexion avec Google. Veuillez réessayer."
-      );
-    }
+    console.log("submit auth");
+
   };
 
   return (
@@ -121,12 +43,12 @@ const AuthForm = ({ onAuth }) => {
               }`}
               onClick={() => setIsLogin(false)}
             >
-              S'inscrire
+              {"S'inscrire"}
             </button>
           </div>
-          {errorMessage && (
+          {/* {errorMessage && (
             <p className="text-sm text-red-500 mb-3">{errorMessage}</p>
-          )}
+          )} */}
           <input
             type="email"
             name="email"
@@ -162,7 +84,7 @@ const AuthForm = ({ onAuth }) => {
           </div>
           {isLogin && (
             <div className="text-right  underline	text-sm mt-3">
-              <a href="/forgot-password">Mot de passe oublié ?</a>
+              {/* <a href="/forgot-password">Mot de passe oublié ?</a> */}
             </div>
           )}
           <button
@@ -182,7 +104,7 @@ const AuthForm = ({ onAuth }) => {
             className="w-[60px] h-[60px] bg-white text-[#333] border border-[#ccc] rounded-full flex items-center justify-center cursor-pointer transition-colors duration-300 ease-in-out hover:bg-[#f0f0f0]" // Utilisez la nouvelle classe pour le bouton Google
             onClick={handleGoogleSignIn}
           >
-            <img
+            <Image
               src="/images/google_icon.svg"
               alt="Google Icon"
               className="h-[35px]"
@@ -194,7 +116,7 @@ const AuthForm = ({ onAuth }) => {
             className="w-[60px] h-[60px] bg-white text-[#333] border border-[#ccc] rounded-full flex items-center justify-center cursor-pointer transition-colors duration-300 ease-in-out hover:bg-[#f0f0f0]" // Utilisez la nouvelle classe pour le bouton Google
             onClick={handleGoogleSignIn}
           >
-            <img
+            <Image
               src="/images/apple_icon.svg"
               alt="Apple Icon"
               className="h-[30px]"
@@ -206,7 +128,7 @@ const AuthForm = ({ onAuth }) => {
             className="w-[60px] h-[60px] bg-white text-[#333] border border-[#ccc] rounded-full flex items-center justify-center cursor-pointer transition-colors duration-300 ease-in-out hover:bg-[#f0f0f0]" // Utilisez la nouvelle classe pour le bouton Google
             onClick={handleGoogleSignIn}
           >
-            <img
+            <Image
               src="/images/facebook_icon.svg"
               alt="Facebook Icon"
               className="h-[30px]"

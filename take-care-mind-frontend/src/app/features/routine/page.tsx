@@ -59,7 +59,7 @@ const MorningRoutinePage = () => {
         <h2 className="text-xl font-semibold mb-2">Rappels Personnalisés</h2>
         <form onSubmit={handleSaveReminders} className="mb-6">
           <label className="block mb-2">
-            Entrez votre rappel (ex. : "Méditer à 7h00") :
+            {`Entrez votre rappel (ex. : "Méditer à 7h00") :`}
             <input
               type="text"
               required

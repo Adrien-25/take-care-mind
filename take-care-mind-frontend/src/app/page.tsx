@@ -19,12 +19,7 @@ export default function Home() {
           >
             Se connecter
           </Link>
-          <Link
-            href="/auth/register"
-            className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
-          >
-            S'inscrire
-          </Link>
+          
         </div>
 
         <section className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">

@@ -1,27 +1,16 @@
 // pages/auth/forgot-password.js
 "use client";
+import Link from "next/link";
 import { useState } from "react";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
+  // const [message, setMessage] = useState("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Envoyer une requête à votre API pour envoyer l'e-mail de réinitialisation
-    const res = await fetch("/api/forgot-password", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email }),
-    });
-
-    if (res.ok) {
-      setMessage("Un e-mail de réinitialisation a été envoyé.");
-    } else {
-      setMessage("Erreur lors de l'envoi de l'e-mail.");
-    }
+  
   };
 
   return (
@@ -41,7 +30,7 @@ const ForgotPassword = () => {
           />
 
           <div className="text-center my-6 underline	text-sm text-white">
-            <a href="/">« Retour à la connexion</a>
+            <Link href="/">« Retour à la connexion</Link>
           </div>
           <button
             type="submit"
@@ -50,7 +39,7 @@ const ForgotPassword = () => {
             Envoyer le lien de réinitialisation
           </button>
         </form>
-        {message && <p className="text-white text-center mt-4">{message}</p>}
+        {/* {message && <p className="text-white text-center mt-4">{message}</p>} */}
       </div>
     </div>
   );

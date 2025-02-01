@@ -1,33 +1,21 @@
-// src/app/api/forgot-password/route.js
-import { getAuth } from "firebase/auth";
-import app from "../../../../lib/firebase";
-import { sendPasswordResetEmail } from "firebase/auth";
-
-const auth = getAuth(app);
+// File: src/app/api/auth/forgot-password/route.js
+import { NextResponse } from 'next/server';
 
 export async function POST(req) {
-  const { email } = await req.json(); // Récupérer le corps de la requête
-
   try {
-    // Envoyer l'e-mail de réinitialisation
-    await sendPasswordResetEmail(auth, email);
-    return new Response(
-      JSON.stringify({
-        message: "Un e-mail de réinitialisation a été envoyé.",
-      }),
-      {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+    const body = await req.json();
+    const { email } = body;
+
+    if (!email) {
+      return NextResponse.json({ message: 'Email is required' }, { status: 400 });
+    }
+
+    // Logique pour traiter la réinitialisation du mot de passe
+    console.log(`Réinitialisation demandée pour : ${email}`);
+
+    return NextResponse.json({ message: 'Reset email sent successfully' });
   } catch (error) {
-    console.error("Erreur lors de l'envoi de l'e-mail :", error);
-    return new Response(
-      JSON.stringify({ error: "Erreur lors de l'envoi de l'e-mail." }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+    console.error(error);
+    return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
   }
 }

@@ -1,22 +1,20 @@
-import type { Metadata } from "next";
+"use client";
+
+import { ReactNode } from "react";
+// import { AuthProvider } from "../lib/AuthContext";
 import "./globals.css";
-import { AuthProvider } from "@/lib/AuthContext";
+import { SessionProvider } from "next-auth/react";
 
-export const metadata: Metadata = {
-  title: "Take Care Mind",
-  description: "Deviens la meilleur version de toi-même",
-};
+interface RootLayoutProps {
+  children: ReactNode;
+}
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="fr">
-      <AuthProvider>
-        <body className={` antialiased bg-gray-900 text-white`}>{children}</body>
-      </AuthProvider>
+      <body>
+        <SessionProvider>{children}</SessionProvider>
+      </body>
     </html>
   );
 }

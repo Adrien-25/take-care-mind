@@ -13,6 +13,7 @@ import {
 } from "react-icons/fi";
 import { usePathname } from "next/navigation";
 import { UserProfile } from "./UserProfile";
+import { signOut } from "next-auth/react";
 
 interface MenuItem {
   icon: React.ElementType;
@@ -54,7 +55,10 @@ const Sidebar: React.FC = () => {
   const isActive = (href: string) => pathname === href;
 
   const handleLogout = () => {
-    console.log("Déconnexion");
+    console.log("Déconnexions");
+    signOut({
+      callbackUrl: "/", // Redirige l'utilisateur vers la page d'accueil après la déconnexion
+    });
   };
 
   const renderMenuItem = (item: MenuItem, index: number) => {
