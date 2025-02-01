@@ -44,7 +44,6 @@ const LoginPage: React.FC = () => {
       await signIn("google", {
         callbackUrl: "http://localhost:3000/dashboard",
       });
-      console.log("Connexion Google réussie.");
     } catch (error) {
       console.error("Erreur inattendue lors de la connexion Google:", error);
       alert("Une erreur inattendue est survenue. Veuillez réessayer.");

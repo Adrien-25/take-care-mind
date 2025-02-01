@@ -55,7 +55,7 @@ const Sidebar: React.FC = () => {
   const isActive = (href: string) => pathname === href;
 
   const handleLogout = () => {
-    console.log("Déconnexions");
+    // console.log("Déconnexions");
     signOut({
       callbackUrl: "/", // Redirige l'utilisateur vers la page d'accueil après la déconnexion
     });

@@ -49,7 +49,6 @@ export default NextAuth({
           }
         );
         const data = await response.json();
-        console.log(data);
 
         if (response.ok && data.token) {
           token.jwt = data.token; // Stocker le token JWT renvoyé par le backend

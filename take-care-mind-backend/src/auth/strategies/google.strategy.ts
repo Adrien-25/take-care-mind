@@ -29,30 +29,3 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     done(null, user);
   }
 }
-
-// @Injectable()
-// export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
-//   constructor(private readonly authService: AuthService) {
-//     super({
-//       clientID: process.env.GOOGLE_CLIENT_ID,
-//       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-//       callbackURL: 'http://localhost:3001/auth/google/callback',
-//       // callbackURL: 'http://localhost:3000/auth/google/callback',
-//       scope: ['email', 'profile'],
-//     });
-//   }
-
-//   async validate(
-//     accessToken: string,
-//     refreshToken: string,
-//     profile: any,
-//     done: VerifyCallback,
-//   ): Promise<any> {
-//     console.log('Profil Google reçu:', profile);
-
-//     const { id, emails } = profile;
-//     const email = emails[0].value;
-//     const user: User = await this.authService.validateGoogleUser(id, email);
-//     done(null, user);
-//   }
-// }

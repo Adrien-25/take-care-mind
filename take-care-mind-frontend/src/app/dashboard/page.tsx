@@ -1,21 +1,8 @@
 "use client";
 
 import Sidebar from "@/components/Sidebar";
-// import { useSession } from "next-auth/react";
-// import { useRouter } from "next/navigation";
-// import { useEffect } from "react";
 
 const Dashboard = () => {
-  // const { data: session } = useSession();
-  // const router = useRouter();
-
-  // useEffect(() => {
-  //   if (!session) {
-  //     console.log("Session expirée, redirection...");
-  //     router.push("/auth/login");
-  //   }
-  // }, [session, router]);
-
   return (
     <div className="flex h-screen">
       <Sidebar />
