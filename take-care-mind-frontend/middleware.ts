@@ -8,7 +8,6 @@ export function middleware(request: NextRequest) {
 
   // const token = request.cookies.get("authToken");
   const token = request.cookies.get("next-auth.session-token");
-  console.log("-- page actuelle  :", pathname);
 
   if (token && (pathname === "/auth/login" || pathname === "/signup")) {
     return NextResponse.redirect(new URL("/dashboard", request.url));

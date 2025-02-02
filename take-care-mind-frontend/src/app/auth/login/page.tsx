@@ -7,26 +7,44 @@ import Link from "next/link";
 import { signIn } from "next-auth/react";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation"; // Importez useRouter
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   // const [error, setError] = useState('');
+  const [error, setError] = useState<string | null>(null); 
+  const router = useRouter(); 
 
   const handleSubmitLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault(); // Empêche le rechargement de la page
 
-    try {
-      await signIn("login", {
-        // redirect: false, // Empêche la redirection automatique
-        email,
-        password,
-        callbackUrl: "http://localhost:3000/dashboard",
-      });
-    } catch (error) {
-      console.log(error);
+    const res = await signIn("login", {
+      redirect: false, // Empêche la redirection automatique
+      email,
+      password,
+    });
+
+    if (res?.error) {
+      setError(res.error); // Stockez l'erreur dans l'état local
+    } else if (res?.ok) {
+      router.push("/dashboard"); // Redirigez vers le tableau de bord
     }
+    console.log(error);
+    console.log(res);
+
+    // try {
+    //   await signIn("login", {
+    //     redirect: false,
+    //     email,
+    //     password,
+    //     // callbackUrl: "http://localhost:3000/dashboard",
+    //   });
+    // } catch (error) {
+    //   console.log("erreur sign login");
+    //   console.log(error);
+    // }
   };
 
   const handleGoogleLogin = async () => {
@@ -64,9 +82,9 @@ const LoginPage: React.FC = () => {
               </button>
             </Link>
           </div>
-          {/* {errorMessage && (
-            <p className="text-sm text-red-500 mb-3">{errorMessage}</p>
-          )} */}
+          {error && (
+            <p className="text-sm text-red-500 mb-3">{error}</p>
+          )}
           <input
             type="email"
             name="email"
@@ -165,43 +183,3 @@ const LoginPage: React.FC = () => {
 };
 
 export default LoginPage;
-// const handleSubmitLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-//   e.preventDefault();
-//   try {
-//     const userCredential = await signInWithEmailAndPassword(
-//       auth,
-//       email,
-//       password
-//     );
-//     if (!userCredential.user.emailVerified) {
-//       toast.error(
-//         "Veuillez vérifier votre adresse e-mail avant de vous connecter."
-//       );
-//       return;
-//     }
-//     const token = await userCredential.user.getIdToken();
-//     setCookie("authToken", token, { maxAge: 60 * 60 * 24 * 7 }); // 7 jours
-//     router.push("/dashboard");
-//   } catch (error: any) {
-//     console.error("Erreur de connexion:", error);
-//     switch (error.code) {
-//       case "auth/invalid-email":
-//         setErrorMessage("L'adresse e-mail est invalide.");
-//         break;
-//       case "auth/user-disabled":
-//         setErrorMessage("Ce compte a été désactivé.");
-//         break;
-//       case "auth/user-not-found":
-//         setErrorMessage("Aucun utilisateur trouvé avec cet e-mail.");
-//         break;
-//       case "auth/wrong-password":
-//         setErrorMessage("Le mot de passe est incorrect.");
-//         break;
-//       case "auth/invalid-credential":
-//         setErrorMessage("Identifiant ou mot de passe invalide.");
-//         break;
-//       default:
-//         setErrorMessage("Une erreur est survenue. Veuillez réessayer.");
-//     }
-//   }
-// };

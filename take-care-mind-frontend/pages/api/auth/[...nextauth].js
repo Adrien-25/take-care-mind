@@ -25,14 +25,22 @@ export default NextAuth({
             }),
           }
         );
-        // console.log("Credentiels request login :");
-        // console.log(res);
+        console.log("Credentiels request login :");
+        console.log(res);
 
+        if (!res.ok) {
+          const errorData = await res.json();
+          throw new Error(errorData.message || "Une erreur est survenue");
+        }
+
+        
         const user = await res.json();
+        if (!user) {
+          throw new Error("Identifiants incorrects");
+        }
         if (res.ok && user) {
           return user;
         }
-        throw new Error("Identifiants incorrects");
       },
     }),
     CredentialsProvider({
@@ -76,7 +84,6 @@ export default NextAuth({
       console.log("JWT CALLBACK TRIGGERED");
 
       if (account) {
-
         if (account.provider === "google") {
           console.log("Connexion via Google détectée.");
 
@@ -108,7 +115,6 @@ export default NextAuth({
           token.accessToken = user?.token || null;
           // token.jwt = user?.accessToken;
         }
-
       }
       return token;
     },

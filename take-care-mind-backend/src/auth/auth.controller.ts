@@ -34,6 +34,7 @@ export class AuthController {
     if (!user) {
       throw new UnauthorizedException('Invalid email or password');
     }
+    console.log(user);
     const token = await this.authService.generateJwtToken(user);
     // return { token };
 

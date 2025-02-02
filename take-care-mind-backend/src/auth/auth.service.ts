@@ -35,7 +35,10 @@ export class AuthService {
     if (!isPasswordValid) {
       throw new UnauthorizedException('Email ou mot de passe incorrect');
     }
+    Logger.log('Mot de passe valide ?   ' + isPasswordValid);
+    
     const { password: _, ...result } = user;
+    Logger.log('Validation donné Login : ' + result);
     return result;
   }
 
