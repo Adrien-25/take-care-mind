@@ -6,25 +6,64 @@ import CredentialsProvider from "next-auth/providers/credentials";
 export default NextAuth({
   providers: [
     CredentialsProvider({
-      name: "Credentials",
+      // name: "Credentials",
+      id: "login",
+      name: "Login",
       credentials: {
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },
-      authorize: async (credentials) => {
+      async authorize(credentials) {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
           {
             method: "POST",
-            body: JSON.stringify(credentials),
             headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email: credentials.email,
+              password: credentials.password,
+            }),
           }
         );
+        // console.log("Credentiels request login :");
+        // console.log(res);
+
         const user = await res.json();
         if (res.ok && user) {
           return user;
         }
-        return null;
+        throw new Error("Identifiants incorrects");
+      },
+    }),
+    CredentialsProvider({
+      id: "signup",
+      name: "Signup",
+      credentials: {
+        email: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        console.log("Credentiels request signup");
+
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/auth/signup`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email: credentials.email,
+              password: credentials.password,
+            }),
+          }
+        );
+
+        const user = await res.json();
+
+        if (res.ok && user) {
+          return user; // Retourne l'utilisateur si l'inscription réussit
+        }
+
+        throw new Error(user.message || "Failed to create account");
       },
     }),
     GoogleProvider({
@@ -33,35 +72,57 @@ export default NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, account }) {
-      if (account) {
-        console.log("JWT REQUEST");
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/auth/google/callback`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              googleId: account.providerAccountId, // ID Google
-              email: token.email, // E-mail de l'utilisateur
-              name: token.name, // Nom de l'utilisateur
-            }),
-          }
-        );
-        const data = await response.json();
+    async jwt({ token, account, user }) {
+      console.log("JWT CALLBACK TRIGGERED");
 
-        if (response.ok && data.token) {
-          token.jwt = data.token; // Stocker le token JWT renvoyé par le backend
+      if (account) {
+
+        if (account.provider === "google") {
+          console.log("Connexion via Google détectée.");
+
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/auth/google/callback`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                googleId: account.providerAccountId, // ID Google
+                email: token.email, // E-mail de l'utilisateur
+                name: token.name, // Nom de l'utilisateur
+              }),
+            }
+          );
+          const data = await response.json();
+          token.provider = "google";
+          if (response.ok && data.token) {
+            token.email = data.email; // Ajoutez l'email au token
+            token.name = data.name;
+            token.accessToken = user?.token;
+
+            // token.jwt = data.token; // Stocker le token JWT renvoyé par le backend
+          }
+        } else if (account.provider === "login") {
+          console.log("Connexion via Login détectée.");
+          token.provider = "login";
+          token.email = user?.email;
+          token.accessToken = user?.token || null;
+          // token.jwt = user?.accessToken;
         }
+
       }
       return token;
     },
     async session({ session, token }) {
-      session.accessToken = token.jwt; // Ajouter le token JWT à la session
+      session.user = { email: token.email, name: token.name }; // Ajoutez uniquement les propriétés nécessaires
+      session.accessToken = token.accessToken;
+      session.provider = token.provider;
       return session;
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
+  pages: {
+    signIn: "/auth/signin", // Page personnalisée pour la connexion
+  },
   session: {
     strategy: "jwt", // S'assurer que NextAuth utilise bien les JWT
   },

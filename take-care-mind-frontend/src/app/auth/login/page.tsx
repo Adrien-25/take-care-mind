@@ -4,8 +4,6 @@ import React, { useState } from "react";
 import { ToastContainer } from "react-toastify";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
-import axios from "axios";
-import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 
 import Image from "next/image";
@@ -14,24 +12,18 @@ const LoginPage: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const router = useRouter();
   // const [error, setError] = useState('');
 
   const handleSubmitLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault(); // Empêche le rechargement de la page
 
     try {
-      // Envoie les informations d'identification au backend
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
-        {
-          email,
-          password,
-        }
-      );
-      const { access_token } = response.data;
-      document.cookie = `auth_token=${access_token}; path=/; secure; samesite=strict`;
-      router.push("/dashboard");
+      await signIn("login", {
+        // redirect: false, // Empêche la redirection automatique
+        email,
+        password,
+        callbackUrl: "http://localhost:3000/dashboard",
+      });
     } catch (error) {
       console.log(error);
     }

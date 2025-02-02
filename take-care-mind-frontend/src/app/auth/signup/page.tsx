@@ -6,6 +6,7 @@ import { ToastContainer } from "react-toastify";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import Image from "next/image";
+import { signIn } from "next-auth/react";
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -15,9 +16,31 @@ const LoginPage: React.FC = () => {
 
   const handleSubmitSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log("handleSubmitSignup");
+    try {
+      await signIn("signup", {
+        redirect: false, // Empêche la redirection automatique
+        email,
+        password,
+      });
+    } catch (error) {
+      console.error(error);
+      alert("Une erreur est survenue lors de la création du compte.");
+    }
   };
 
-  const handleGoogleSignIn = async () => {};
+  const handleGoogleSignIn = async () => {
+    console.log("Début de la création de compte avec Google...");
+
+    try {
+      await signIn("google", {
+        callbackUrl: "http://localhost:3000/dashboard",
+      });
+    } catch (error) {
+      console.error("Erreur inattendue lors de la connexion Google:", error);
+      alert("Une erreur inattendue est survenue. Veuillez réessayer.");
+    }
+  };
 
   return (
     <div className="flex justify-center items-center h-screen bg-[#121212]">
@@ -74,14 +97,13 @@ const LoginPage: React.FC = () => {
                 <EyeIcon className="w-5 h-5" />
               )}
             </button>
+            <button
+              type="submit"
+              className="w-full py-2.5 mt-9 bg-[#007bff] text-white border-none rounded-lg cursor-pointer transition-colors duration-300 ease-in-out hover:bg-[#0056b3]"
+            >
+              {"S'inscrire"}
+            </button>
           </div>
-
-          <button
-            type="submit"
-            className="w-full py-2.5 mt-9 bg-[#007bff] text-white border-none rounded-lg cursor-pointer transition-colors duration-300 ease-in-out hover:bg-[#0056b3]"
-          >
-            {"S'inscrire"}
-          </button>
         </form>
         <div className="font-bold text-sm text-center my-6">
           ou se connecter avec
@@ -97,6 +119,8 @@ const LoginPage: React.FC = () => {
               src="/images/google_icon.svg"
               alt="Google Icon"
               className="h-[35px]"
+              width={100}
+              height={100}
             />
           </button>
           {/* BOUTON APPLE */}
@@ -109,6 +133,8 @@ const LoginPage: React.FC = () => {
               src="/images/apple_icon.svg"
               alt="Apple Icon"
               className="h-[30px]"
+              width={100}
+              height={100}
             />
           </button>
           {/* BOUTON FACEBOOK */}
@@ -121,6 +147,8 @@ const LoginPage: React.FC = () => {
               src="/images/facebook_icon.svg"
               alt="Facebook Icon"
               className="h-[30px]"
+              width={100}
+              height={100}
             />
           </button>
         </div>
