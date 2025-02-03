@@ -5,34 +5,32 @@ import { ToastContainer } from "react-toastify";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
-
 import Image from "next/image";
-import { useRouter } from "next/navigation"; // Importez useRouter
+import { useRouter } from "next/navigation"; 
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  // const [error, setError] = useState('');
-  const [error, setError] = useState<string | null>(null); 
-  const router = useRouter(); 
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   const handleSubmitLogin = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); // Empêche le rechargement de la page
+    event.preventDefault();
 
     const res = await signIn("login", {
-      redirect: false, // Empêche la redirection automatique
+      redirect: false,
       email,
       password,
     });
 
     if (res?.error) {
-      setError(res.error); // Stockez l'erreur dans l'état local
+      setError(res.error);
     } else if (res?.ok) {
       router.push("/dashboard"); // Redirigez vers le tableau de bord
     }
-    console.log(error);
-    console.log(res);
+    // console.log(error);
+    // console.log(res);
 
     // try {
     //   await signIn("login", {
@@ -56,7 +54,7 @@ const LoginPage: React.FC = () => {
       });
     } catch (error) {
       console.error("Erreur inattendue lors de la connexion Google:", error);
-      alert("Une erreur inattendue est survenue. Veuillez réessayer.");
+      // alert("Une erreur inattendue est survenue. Veuillez réessayer.");
     }
   };
 
@@ -82,9 +80,7 @@ const LoginPage: React.FC = () => {
               </button>
             </Link>
           </div>
-          {error && (
-            <p className="text-sm text-red-500 mb-3">{error}</p>
-          )}
+          {error && <p className="text-sm text-red-500 mb-3">{error}</p>}
           <input
             type="email"
             name="email"

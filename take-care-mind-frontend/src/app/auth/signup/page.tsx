@@ -1,31 +1,34 @@
 "use client";
 
 import React, { useState } from "react";
-
 import { ToastContainer } from "react-toastify";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import Image from "next/image";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  // const [errorMessage, setErrorMessage] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const router = useRouter();
 
   const handleSubmitSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("handleSubmitSignup");
-    try {
-      await signIn("signup", {
-        redirect: false, // Empêche la redirection automatique
-        email,
-        password,
-      });
-    } catch (error) {
-      console.error(error);
-      alert("Une erreur est survenue lors de la création du compte.");
+
+    const res = await signIn("signup", {
+      redirect: false,
+      email,
+      password,
+    });
+    console.log(res);
+
+    if (res?.error) {
+      setError(res.error);
+    } else if (res?.ok) {
+      router.push("/auth/login");
     }
   };
 
@@ -38,7 +41,7 @@ const LoginPage: React.FC = () => {
       });
     } catch (error) {
       console.error("Erreur inattendue lors de la connexion Google:", error);
-      alert("Une erreur inattendue est survenue. Veuillez réessayer.");
+      // alert("Une erreur inattendue est survenue. Veuillez réessayer.");
     }
   };
 
@@ -62,9 +65,7 @@ const LoginPage: React.FC = () => {
               {"S'inscrire"}
             </button>
           </div>
-          {/* {errorMessage && (
-            <p className="text-sm text-red-500 mb-3">{errorMessage}</p>
-          )} */}
+          {error && <p className="text-sm text-red-500 mb-3">{error}</p>}
           <input
             type="email"
             name="email"
@@ -97,13 +98,13 @@ const LoginPage: React.FC = () => {
                 <EyeIcon className="w-5 h-5" />
               )}
             </button>
-            <button
-              type="submit"
-              className="w-full py-2.5 mt-9 bg-[#007bff] text-white border-none rounded-lg cursor-pointer transition-colors duration-300 ease-in-out hover:bg-[#0056b3]"
-            >
-              {"S'inscrire"}
-            </button>
           </div>
+          <button
+            type="submit"
+            className="w-full py-2.5 mt-9 bg-[#007bff] text-white border-none rounded-lg cursor-pointer transition-colors duration-300 ease-in-out hover:bg-[#0056b3]"
+          >
+            {"S'inscrire"}
+          </button>
         </form>
         <div className="font-bold text-sm text-center my-6">
           ou se connecter avec

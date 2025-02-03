@@ -25,22 +25,15 @@ export default NextAuth({
             }),
           }
         );
-        console.log("Credentiels request login :");
-        console.log(res);
-
         if (!res.ok) {
           const errorData = await res.json();
           throw new Error(errorData.message || "Une erreur est survenue");
         }
-
-        
         const user = await res.json();
         if (!user) {
           throw new Error("Identifiants incorrects");
         }
-        if (res.ok && user) {
-          return user;
-        }
+        return user;
       },
     }),
     CredentialsProvider({
@@ -51,7 +44,6 @@ export default NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        console.log("Credentiels request signup");
 
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/auth/signup`,
@@ -65,13 +57,16 @@ export default NextAuth({
           }
         );
 
-        const user = await res.json();
-
-        if (res.ok && user) {
-          return user; // Retourne l'utilisateur si l'inscription réussit
+        if (!res.ok) {
+          const errorData = await res.json();
+          throw new Error(errorData.message || "Une erreur est survenue");
         }
 
-        throw new Error(user.message || "Failed to create account");
+
+        return {
+          success: true,
+          provider: "signup",
+        };
       },
     }),
     GoogleProvider({
@@ -81,8 +76,6 @@ export default NextAuth({
   ],
   callbacks: {
     async jwt({ token, account, user }) {
-      console.log("JWT CALLBACK TRIGGERED");
-
       if (account) {
         if (account.provider === "google") {
           console.log("Connexion via Google détectée.");
@@ -115,11 +108,12 @@ export default NextAuth({
           token.accessToken = user?.token || null;
           // token.jwt = user?.accessToken;
         }
+
       }
       return token;
     },
     async session({ session, token }) {
-      session.user = { email: token.email, name: token.name }; // Ajoutez uniquement les propriétés nécessaires
+      session.user = { email: token.email };
       session.accessToken = token.accessToken;
       session.provider = token.provider;
       return session;
@@ -127,9 +121,9 @@ export default NextAuth({
   },
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
-    signIn: "/auth/signin", // Page personnalisée pour la connexion
+    signIn: "/auth/signin", 
   },
   session: {
-    strategy: "jwt", // S'assurer que NextAuth utilise bien les JWT
+    strategy: "jwt",
   },
 });

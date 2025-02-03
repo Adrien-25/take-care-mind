@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
-  console.log("🚀 Middleware exécuté pour :", request.nextUrl.pathname);
+  // console.log("🚀 Middleware exécuté pour :", request.nextUrl.pathname);
   const { pathname } = request.nextUrl;
 
   // const token = request.cookies.get("authToken");
@@ -16,7 +16,8 @@ export function middleware(request: NextRequest) {
   if (!token && request.nextUrl.pathname.startsWith("/dashboard")) {
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
-  console.log("Middleware - Allowing access");
+
+  // console.log("Middleware - Allowing access");
   return NextResponse.next();
 }
 

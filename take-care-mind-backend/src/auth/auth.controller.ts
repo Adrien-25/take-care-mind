@@ -3,6 +3,7 @@ import {
   ConflictException,
   Controller,
   Get,
+  HttpStatus,
   Logger,
   Post,
   Redirect,
@@ -34,9 +35,8 @@ export class AuthController {
     if (!user) {
       throw new UnauthorizedException('Invalid email or password');
     }
-    console.log(user);
+    // console.log(user);
     const token = await this.authService.generateJwtToken(user);
-    // return { token };
 
     return {
       id: user.id,
@@ -49,38 +49,19 @@ export class AuthController {
   @Post('signup')
   async signup(@Body() body: { email: string; password: string }) {
     const { email, password } = body;
+    // Logger.log('SIGNUP CONTROLLER : ');
 
     try {
       const user = await this.authService.signup(email, password);
-      return { message: 'Utilisateur créé avec succès', user };
+      // Logger.log('UTILISATEUR CRÉÉ : ' + JSON.stringify(user));
+      // return user;
+      return { statusCode: HttpStatus.CREATED };
+      // return { statusCode: HttpStatus.CREATED, user };
     } catch (error) {
-      if (error.code === '23505') {
-        // Code PostgreSQL pour violation d'unicité
-        throw new ConflictException(
-          'Un utilisateur avec cet email existe déjà',
-        );
-      }
+      // Logger.log('ERREUR LORS DU SIGNUP : ' + JSON.stringify(error));
       throw error;
     }
   }
-
-  // @Post('google/callback')
-  // // @UseGuards(AuthGuard('google'))
-  // @Redirect()
-  // async googleAuthRedirect(@Request() req) {
-  //   try {
-  //     const { id, emails } = req.user;
-  //     const email = emails[0].value;
-  //     const user = await this.authService.validateGoogleUser(id, email);
-  //     const token = await this.authService.generateJwtToken(user);
-  //     return { url: `http://localhost:3000/dashboard?token=${token}` };
-  //   } catch (error) {
-  //     this.logger.error('Google authentication failed', error.stack);
-  //     return {
-  //       url: 'http://localhost:3000/auth/error?message=AuthenticationFailed',
-  //     };
-  //   }
-  // }
 
   @Get('google')
   @UseGuards(AuthGuard('google'))
