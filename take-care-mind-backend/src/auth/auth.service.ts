@@ -15,10 +15,10 @@ export class AuthService {
 
   async validateGoogleUser(googleId: string, email: string): Promise<User> {
     let user = await this.userRepository.findOne({ where: { googleId } });
-    Logger.log('Utilisateur trouvé : ' + JSON.stringify(user));
+    // Logger.log('Utilisateur trouvé : ' + JSON.stringify(user));
 
     if (!user) {
-      Logger.log("Pas d'user");
+      // Logger.log("Pas d'user");
       user = this.userRepository.create({ googleId, email });
       await this.userRepository.save(user);
     }
@@ -30,7 +30,7 @@ export class AuthService {
 
     
     if (!user) {
-      Logger.log("Pas d'user");
+      // Logger.log("Pas d'user");
       throw new UnauthorizedException('Email ou mot de passe incorrect');
     }
     const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -45,13 +45,13 @@ export class AuthService {
   }
 
   async signup(email: string, password: string): Promise<User> {
-    Logger.log("------SIGNUP SERVICE------");
+    // Logger.log("------SIGNUP SERVICE------");
 
     const existingUser = await this.userRepository.findOne({
       where: { email },
     });
     if (existingUser) {
-      Logger.log("EXISTING USER");
+      // Logger.log("EXISTING USER");
 
       throw new ConflictException('Un utilisateur avec cet email existe déjà');
     }
@@ -60,7 +60,7 @@ export class AuthService {
       email,
       password: hashedPassword,
     });
-    Logger.log("CREATE USER");
+    // Logger.log("CREATE USER");
     await this.userRepository.save(newUser);
     // return this.userRepository.save(newUser);
     return newUser;
