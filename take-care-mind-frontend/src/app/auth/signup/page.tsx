@@ -47,7 +47,7 @@ const LoginPage: React.FC = () => {
 
   return (
     <div className="flex justify-center items-center h-screen bg-[#121212]">
-      <div className="w-[400px] max-w-[90%] mx-auto p-5 border border-[#444] rounded-lg shadow-lg bg-[#222] text-white">
+      <div className="text-sm w-[400px] max-w-[90%] mx-auto p-5 border border-[#444] rounded-lg shadow-lg bg-[#222] text-white">
         <h2 className="text-center mb-6 text-2xl">Bienvenue</h2>
         <form onSubmit={handleSubmitSignup}>
           <div className="relative w-full mx-auto flex justify-center gap-4 mb-8 bg-[#36373B] p-1 rounded-lg">
@@ -106,12 +106,31 @@ const LoginPage: React.FC = () => {
             {"S'inscrire"}
           </button>
         </form>
-        <div className="font-bold text-sm text-center my-6">
-          ou se connecter avec
+        <div className="flex items-center my-6">
+          <hr className="flex-grow border-gray-600" />
+          <span className="px-4 font-bold text-sm text-gray-300">OU</span>
+          <hr className="flex-grow border-gray-600" />
         </div>
+        {/* <div className="font-bold text-sm text-center my-6">
+          OU
+        </div> */}
         <div className="flex items-center justify-evenly mb-5">
-          {/* BOUTON GOOGLE */}
           <button
+            type="button"
+            className="bg-white text-[#333] border border-[#ccc] rounded-md flex items-center justify-center cursor-pointer transition-colors duration-300 ease-in-out hover:bg-[#f0f0f0] px-4 py-2.5 w-full"
+            onClick={handleGoogleSignIn}
+          >
+            <Image
+              src="/images/google_icon.svg"
+              alt="Google Icon"
+              className="h-[20px] mr-2" // Réduction de la taille de l'icône et ajout de marge à droite
+              width={20}
+              height={20}
+            />
+            <span>Se connecter avec Google</span> {/* Ajout du texte */}
+          </button>
+          {/* BOUTON GOOGLE */}
+          {/* <button
             type="button"
             className="w-[60px] h-[60px] bg-white text-[#333] border border-[#ccc] rounded-full flex items-center justify-center cursor-pointer transition-colors duration-300 ease-in-out hover:bg-[#f0f0f0]" // Utilisez la nouvelle classe pour le bouton Google
             onClick={handleGoogleSignIn}
@@ -123,9 +142,9 @@ const LoginPage: React.FC = () => {
               width={100}
               height={100}
             />
-          </button>
+          </button> */}
           {/* BOUTON APPLE */}
-          <button
+          {/* <button
             type="button"
             className="w-[60px] h-[60px] bg-white text-[#333] border border-[#ccc] rounded-full flex items-center justify-center cursor-pointer transition-colors duration-300 ease-in-out hover:bg-[#f0f0f0]" // Utilisez la nouvelle classe pour le bouton Google
             onClick={handleGoogleSignIn}
@@ -137,9 +156,9 @@ const LoginPage: React.FC = () => {
               width={100}
               height={100}
             />
-          </button>
+          </button> */}
           {/* BOUTON FACEBOOK */}
-          <button
+          {/* <button
             type="button"
             className="w-[60px] h-[60px] bg-white text-[#333] border border-[#ccc] rounded-full flex items-center justify-center cursor-pointer transition-colors duration-300 ease-in-out hover:bg-[#f0f0f0]" // Utilisez la nouvelle classe pour le bouton Google
             onClick={handleGoogleSignIn}
@@ -151,7 +170,7 @@ const LoginPage: React.FC = () => {
               width={100}
               height={100}
             />
-          </button>
+          </button> */}
         </div>
       </div>
       <ToastContainer />
