@@ -44,7 +44,6 @@ export default NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/auth/signup`,
           {
@@ -61,7 +60,6 @@ export default NextAuth({
           const errorData = await res.json();
           throw new Error(errorData.message || "Une erreur est survenue");
         }
-
 
         return {
           success: true,
@@ -86,16 +84,18 @@ export default NextAuth({
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
-                googleId: account.providerAccountId, // ID Google
-                email: token.email, // E-mail de l'utilisateur
-                name: token.name, // Nom de l'utilisateur
+                googleId: account.providerAccountId,
+                email: token.email,
+                name: token.name,
               }),
             }
           );
           const data = await response.json();
           token.provider = "google";
           if (response.ok && data.token) {
-            token.email = data.email; // Ajoutez l'email au token
+            console.log(data);
+            console.log(data.email);
+            token.email = data.email;
             token.name = data.name;
             token.accessToken = user?.token;
 
@@ -108,12 +108,15 @@ export default NextAuth({
           token.accessToken = user?.token || null;
           // token.jwt = user?.accessToken;
         }
-
       }
       return token;
     },
     async session({ session, token }) {
+      console.log("TOKEN PROVIDER : "+token.provider);
+      console.log("TOKEN ACCESS : "+token.accessToken);
+      console.log("TOKEN EMAIL : "+token.email);
       session.user = { email: token.email };
+      console.log("TOKEN USER : "+session.user);
       session.accessToken = token.accessToken;
       session.provider = token.provider;
       return session;
@@ -121,7 +124,7 @@ export default NextAuth({
   },
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
-    signIn: "/auth/signin", 
+    signIn: "/auth/signin",
   },
   session: {
     strategy: "jwt",

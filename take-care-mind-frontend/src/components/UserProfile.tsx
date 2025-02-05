@@ -23,10 +23,10 @@ export const UserProfile: React.FC<UserProfileProps> = ({ name, onLogout }) => {
     <div className="mt-auto p-4 relative">
       <div className="flex items-center justify-between">
         <div className="flex items-center">
-          <span className="w-10 h-10 rounded-full flex items-center justify-center text-white font-medium bg-gradient-to-r from-blue-500 to-purple-500">
+          <span className="w-7 h-7 rounded-full flex items-center justify-center text-white font-medium bg-gradient-to-r from-blue-500 to-purple-500">
             {initials}
           </span>
-          <span className="ml-3 text-sm font-medium">{name}</span>
+          <span className="ml-3 text-xs font-medium truncate max-w-40">{name}</span>
         </div>
         <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}

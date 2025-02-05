@@ -25,7 +25,12 @@ export class AuthController {
     const { googleId, email } = body;
     const user = await this.authService.validateGoogleUser(googleId, email);
     const token = await this.authService.generateJwtToken(user);
-    return { token };
+    return {
+      id: user.id,
+      email: user.email,
+      token,
+    };
+    // return { token };
   }
 
   @Post('login')
@@ -41,7 +46,6 @@ export class AuthController {
     return {
       id: user.id,
       email: user.email,
-      name: user.name,
       token,
     };
   }

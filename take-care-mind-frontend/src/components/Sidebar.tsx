@@ -13,7 +13,7 @@ import {
 } from "react-icons/fi";
 import { usePathname } from "next/navigation";
 import { UserProfile } from "./UserProfile";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 interface MenuItem {
   icon: React.ElementType;
@@ -25,6 +25,8 @@ interface MenuItem {
 const Sidebar: React.FC = () => {
   const [openAccordions, setOpenAccordions] = useState<number[]>([1]);
   const pathname = usePathname();
+  const { data: session } = useSession();
+  const userName = session?.user?.email || "";
 
   const menuItems: MenuItem[] = [
     { icon: FiHome, text: "Dashboard", href: "/dashboard" },
@@ -57,7 +59,7 @@ const Sidebar: React.FC = () => {
   const handleLogout = () => {
     // console.log("Déconnexions");
     signOut({
-      callbackUrl: "/auth/login", 
+      callbackUrl: "/auth/login",
     });
   };
 
@@ -127,7 +129,8 @@ const Sidebar: React.FC = () => {
         <ul>{menuItems.map((item, index) => renderMenuItem(item, index))}</ul>
       </nav>
 
-      <UserProfile name="Adrien SCHMIDT" onLogout={handleLogout} />
+      <UserProfile name={userName} onLogout={handleLogout} />
+      {/* <UserProfile name="Adrien SCHMIDT" onLogout={handleLogout} /> */}
     </div>
   );
 };
